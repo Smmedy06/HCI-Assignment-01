@@ -29,7 +29,7 @@
 }
 
 body {
-    font-family: 'Inter', 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Inter', sans-serif;
     background: var(--background-gradient);
     min-height: 100vh;
     overflow-x: hidden;
@@ -126,6 +126,20 @@ p {
     gap: 8px;
 }
 
+/* Remove underline when logo is an anchor */
+.logo,
+.logo:link,
+.logo:visited,
+.logo:hover,
+.logo:active,
+.logo:focus,
+.logo:focus-visible {
+    text-decoration: none;
+    color: inherit;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
 .logo-icon {
     width: 40px;
     height: 40px;
@@ -166,10 +180,15 @@ p {
     color: var(--primary-color);
 }
 
-.nav a:focus {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-    border-radius: 4px;
+.nav a,
+.nav a:link,
+.nav a:visited,
+.nav a:hover,
+.nav a:active,
+.nav a:focus,
+.nav a:focus-visible {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .get-started-btn {
@@ -1205,6 +1224,31 @@ body[data-theme="dark"] .questions {
     transform: translateY(-2px);
 }
 
+/* Download button (contact page) */
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary-color);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.download-btn svg { color: #fff; }
+
+.download-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-light); }
+
+.download-btn:focus,
+.download-btn:focus-visible,
+.download-btn:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
 .learn-more-btn:focus {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
@@ -1660,7 +1704,7 @@ body[data-theme="dark"] .questions {
 }
 
 /* Focus Styles for Accessibility */
-*:focus {
+*:focus-visible {
     outline: 2px solid var(--accent-color);
     outline-offset: 2px;
 }
@@ -1838,6 +1882,66 @@ select:focus {
     outline-offset: 2px;
 }
 
+/* =====================
+   Custom responsive fixes
+   ===================== */
+@media (max-width: 768px) {
+    /* Mobile header layout: logo left, controls + burger right */
+    .header { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px; grid-auto-flow: column; }
+    .logo { grid-column: 1 / 2; }
+    .header-controls { grid-column: 2 / 3; grid-row: 1; display: inline-flex; gap: 8px; align-items: center; justify-self: end; }
+    .mobile-menu-toggle { grid-column: 3 / 4; grid-row: 1; justify-self: end; }
+    .nav { position: absolute; left: 0; right: 0; }
+    .theme-toggle { align-self: center; margin: 0; }
+    /* Hide primary CTA on mobile */
+    .get-started-btn { display: none !important; }
+
+    /* Collapse two-column hero */
+    .main-content { grid-template-columns: 1fr; gap: 30px; }
+
+    /* Keep stats in a single row on mobile */
+    .stats-container { flex-direction: row; flex-wrap: nowrap; }
+
+    /* Make program cards fluid */
+    .programs-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .program-item { width: 100%; }
+    .program-card { width: 100%; max-width: none; height: auto; margin: 0; }
+    .program-icon { width: 100%; height: auto; aspect-ratio: 4 / 3; }
+    .program-icon img { aspect-ratio: 4 / 3; }
+
+    /* Let tags wrap better and avoid character overlap */
+    .task-tags { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
+    .block-character { display: none; }
+
+    /* Fix gallery collage for mobile */
+    .image-gallery { margin-left: 0; }
+    .gallery-images { position: static; height: auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .gallery-images .gallery-image:nth-child(n+5) { display: none; }
+    .gallery-image,
+    .gallery-image:nth-child(1),
+    .gallery-image:nth-child(2),
+    .gallery-image:nth-child(3),
+    .gallery-image:nth-child(4),
+    .gallery-image:nth-child(5),
+    .gallery-image:nth-child(6) { position: relative; width: 100%; height: auto; top: auto; left: auto; transform: none; }
+    .gallery-image img { aspect-ratio: 3/4; width: 100%; height: 100%; }
+
+    /* Programs section grid */
+    .programs-content { grid-template-columns: 1fr; gap: 30px; }
+    .programs-grid-new { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    /* Hide CTA image on About page only on mobile */
+    .about-page .cta-image { display: none !important; }
+}
+
+@media (max-width: 480px) {
+    /* Keep two-column layout for small phones and show only 3 */
+    .gallery-images { grid-template-columns: repeat(2, 1fr); }
+    .gallery-images .gallery-image:nth-child(n+5) { display: none; }
+    .programs-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .programs-grid-new { grid-template-columns: repeat(2, 1fr); }
+    .program-card { max-width: 100%; }
+}
+
 /* ===========================================
    COMPREHENSIVE RESPONSIVE DESIGN SYSTEM
    =========================================== */
@@ -1917,7 +2021,7 @@ select:focus {
     
     .cta-classroom, .cta-child {
         height: 150px;
-        padding: 15px;
+        padding: 0;
     }
     
     .about-page .cta-section {
@@ -1939,8 +2043,8 @@ select:focus {
     }
     
     .programs-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
     }
     
     .teachers-grid {
@@ -2013,8 +2117,8 @@ select:focus {
     }
     
     .programs-grid {
-        grid-template-columns: 1fr;
-        gap: 25px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }
     
     .teachers-grid {
@@ -2030,6 +2134,7 @@ select:focus {
     
     .cta-classroom, .cta-child {
         height: 180px;
+        padding: 0;
     }
     
     .about-page .cta-section {
@@ -2074,6 +2179,7 @@ select:focus {
     
     .cta-classroom, .cta-child {
         height: 200px;
+        padding: 0;
     }
     
     .about-page .cta-section {
@@ -2229,7 +2335,17 @@ select:focus {
     .cta-section {
         background: linear-gradient(135deg, #1f2937, #111827);
     }
+    /* Keep index page CTA light even if OS is dark */
+    body[data-theme="light"] .index-page .cta-section { background: transparent !important; }
 }
+
+/* Force transparent CTA background on index page for mobile only */
+@media (max-width: 768px) {
+    .index-page .cta-section { background: transparent !important; }
+}
+
+/* Force light theme CTA background to match page (avoid dark OS override) */
+body[data-theme="light"] .index-page .cta-section { background: transparent !important; }
 
 /* ===========================================
    RESPONSIVE IMAGE OPTIMIZATIONS
@@ -2388,7 +2504,7 @@ img[loading="lazy"].loaded {
    =========================================== */
 
 /* Focus indicators for keyboard navigation */
-*:focus {
+*:focus-visible {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
@@ -2454,6 +2570,7 @@ img[loading="lazy"].loaded {
 
     .cta-classroom, .cta-child {
         height: 200px;
+        padding: 0;
     }
 
     .about-page .cta-section {
@@ -2534,6 +2651,7 @@ img[loading="lazy"].loaded {
 
     .cta-classroom, .cta-child {
         height: 180px;
+        padding: 0;
     }
 
     .about-page .cta-section {
@@ -2584,11 +2702,10 @@ img[loading="lazy"].loaded {
         padding: 0 15px;
     }
     
-    .header {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-    }
+    /* keep header in a single row for index page */
+    .index-page .header { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px; text-align: initial; }
+    .index-page .header .header-controls { justify-self: end; display: inline-flex; align-items: center; gap: 8px; }
+    .index-page .header .mobile-menu-toggle { justify-self: end; }
     
     .nav {
         flex-direction: column;

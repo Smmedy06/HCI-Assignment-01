@@ -10,9 +10,8 @@
     <meta property="og:url" content="https://kidedu.com/contact">
     <meta name="twitter:card" content="summary_large_image">
     <title>Contact Us - Kidedu</title>
-    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="assets/media/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css"> 
 </head>
@@ -20,12 +19,18 @@
     <div class="container">
         <!-- Header -->
         <header class="header">
-            <div class="logo">
+            <a href="index.html" class="logo" aria-label="Kidedu Home">
                 <div class="logo-icon">KE</div>
                 <span class="logo-text">kidedu</span>
-            </div>
+            </a>
             
-            <nav class="nav">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="nav" id="mainNav">
                 <a href="index.html">Home</a>
                 <a href="about.html">About</a>
                 <a href="contact.html" class="active">Contact</a>
@@ -126,6 +131,17 @@
                             Live Chat: Under 5 minutes
                         </li>
                     </ul>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <a class="download-btn" href="assets/images/broucher.png" download>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M12 3v12"/>
+                            <path d="M7 10l5 5 5-5"/>
+                            <path d="M5 21h14"/>
+                        </svg>
+                        Download Brochure
+                    </a>
                 </div>
             </div>
             
@@ -291,42 +307,54 @@
     </footer>
 
     <script>
-        // Theme toggle functionality
+        // Theme toggle + Mobile menu functionality
         document.addEventListener('DOMContentLoaded', function() {
             const themeToggle = document.getElementById('themeToggle');
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mainNav = document.getElementById('mainNav');
             const body = document.body;
-            
-            console.log('Theme toggle initialized');
-            
-            // Check for saved theme preference or default to light mode
+
+            // Theme
             const currentTheme = localStorage.getItem('theme') || 'light';
-            console.log('Current theme:', currentTheme);
             body.setAttribute('data-theme', currentTheme);
-            
-            // Update icon based on current theme
             updateThemeIcon(currentTheme);
-            
+
             if (themeToggle) {
                 themeToggle.addEventListener('click', () => {
-                    const currentTheme = body.getAttribute('data-theme');
-                    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                    
-                    console.log('Switching from', currentTheme, 'to', newTheme);
-                    
-                    body.setAttribute('data-theme', newTheme);
-                    localStorage.setItem('theme', newTheme);
-                    updateThemeIcon(newTheme);
+                    const current = body.getAttribute('data-theme');
+                    const next = current === 'light' ? 'dark' : 'light';
+                    body.setAttribute('data-theme', next);
+                    localStorage.setItem('theme', next);
+                    updateThemeIcon(next);
                 });
-            } else {
-                console.error('Theme toggle button not found!');
             }
-            
+
+            // Mobile menu
+            if (mobileMenuToggle && mainNav) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    mobileMenuToggle.classList.toggle('active');
+                    mainNav.classList.toggle('active');
+                });
+
+                mainNav.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenuToggle.classList.remove('active');
+                        mainNav.classList.remove('active');
+                    });
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!mobileMenuToggle.contains(e.target) && !mainNav.contains(e.target)) {
+                        mobileMenuToggle.classList.remove('active');
+                        mainNav.classList.remove('active');
+                    }
+                });
+            }
+
             function updateThemeIcon(theme) {
+                if (!themeToggle) return;
                 const sunIcon = themeToggle.querySelector('.sun-icon');
                 const moonIcon = themeToggle.querySelector('.moon-icon');
-                
-                console.log('Updating icons for theme:', theme);
-                
                 if (theme === 'dark') {
                     if (sunIcon) sunIcon.style.display = 'none';
                     if (moonIcon) moonIcon.style.display = 'block';
